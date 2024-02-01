@@ -118,7 +118,7 @@ fn main() {
     }
 
     else{
-    let filePath = Path::new("C:/Users/ashka/Documents/Coding/Guitar_Tab_Generator/A2_Flac.mp3");     
+    let filePath = Path::new(&args[1]);          
     let fileType = filePath.extension().unwrap().to_str().unwrap();
 
     let file = readFile(filePath);
