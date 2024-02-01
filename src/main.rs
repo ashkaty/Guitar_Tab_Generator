@@ -6,11 +6,17 @@ use rustfft::{FftPlanner, num_complex::Complex};
 use std::path::Path;
 use minimp3::{Decoder, Frame, Error};
 use cute::c;
-
+use std::process;
+use std::env;
 
 fn readFile(filePath:&Path) -> File{
-    let mut f = File::open(filePath).unwrap();
-    f
+    match File::open(filePath){
+        Ok(f) => return f,
+        Err(e) => {
+            println!("Error: File Path Not Valid");
+            process::exit(1);
+        },
+    };
 }
 
 //description: This file takes in a sample array and edits it so the data is representative of a mono signal
@@ -104,6 +110,14 @@ fn calculateMagnitude(complex: &Complex<f64>) -> f64 {
 
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 2{
+        println!("Error: Not Enough Arguments. Enter a file path");
+        process::exit(1);
+    }
+
+    else{
     let filePath = Path::new("C:/Users/ashka/Documents/Coding/Guitar_Tab_Generator/A2_Flac.mp3");     
     let fileType = filePath.extension().unwrap().to_str().unwrap();
 
@@ -137,4 +151,5 @@ fn main() {
     let maxFrequency = ((maxMagnitudeIndex) as f64 * 48000.0 / *(complexSampleLength) as f64);
 
     println!("{}", maxFrequency);
+    }
 }
